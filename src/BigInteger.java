@@ -11,18 +11,17 @@ public class BigInteger
   
     // implement this
     public static final Pattern EXPRESSION_PATTERN = Pattern.compile("");
-    public static String result;
-    public static String value;
-    public static char sign;
+    public String value;
+    public char sign;
 
     public BigInteger() {
-        result = "not working";
+        value = "not working";
     }
   
   
     public BigInteger(int i)
     {
-        result = "Done!"+i;
+        value = "Done!"+i;
     }
   
     public BigInteger(int[] num1)
@@ -44,7 +43,44 @@ public class BigInteger
   
     public BigInteger add(BigInteger big)
     {
-        return new BigInteger(1);
+        byte[] num1 = value.getBytes();
+        byte[] num2 = big.value.getBytes();
+        System.out.println(num1);
+        byte[] biggerNum; // 둘 중에 더 큰 수
+        byte[] smallerNum;
+        int smallerLength; // 둘 중에 더 작은 길
+        int biggerLength;
+
+        if(num1.length>=num2.length) {
+            biggerNum = num1;
+            smallerNum = num2;
+            biggerLength = num1.length;
+            smallerLength = num2.length;
+        } else {
+            biggerNum = num2;
+            smallerNum = num1;
+            biggerLength = num2.length;
+            smallerLength = num1.length;
+        }
+
+        byte[] result = new byte[biggerLength+1];
+
+
+        for(int i=0 ; i<biggerLength; i++) {
+            if(i>=smallerLength) {
+                result[biggerLength-1-i] = biggerNum[biggerLength-1-i];
+                continue;
+            }
+            byte sum = (byte)(biggerNum[biggerLength-1-i]+smallerNum[smallerLength-1-i]-'0');
+            if(sum>'9') {
+                result[biggerLength-1-i] = (byte)(sum-10);
+                biggerNum[biggerLength-2-i] +=1;
+            } else {
+                result[biggerLength-1-i] = sum;
+            }
+        }
+
+        return new BigInteger(new String(result));
     }
   
     public BigInteger subtract(BigInteger big)
@@ -60,7 +96,7 @@ public class BigInteger
     @Override
     public String toString()
     {
-        return result;
+        return value;
     }
   
     static BigInteger evaluate(String input) throws IllegalArgumentException
