@@ -45,7 +45,6 @@ public class BigInteger
     {
         byte[] num1 = value.getBytes();
         byte[] num2 = big.value.getBytes();
-        System.out.println(num1);
         byte[] biggerNum; // 둘 중에 더 큰 수
         byte[] smallerNum;
         int smallerLength; // 둘 중에 더 작은 길
@@ -68,15 +67,20 @@ public class BigInteger
 
         for(int i=0 ; i<biggerLength; i++) {
             if(i>=smallerLength) {
-                result[biggerLength-1-i] = biggerNum[biggerLength-1-i];
+                result[biggerLength-i] = biggerNum[biggerLength-1-i];
                 continue;
             }
             byte sum = (byte)(biggerNum[biggerLength-1-i]+smallerNum[smallerLength-1-i]-'0');
             if(sum>'9') {
-                result[biggerLength-1-i] = (byte)(sum-10);
+                if(i==biggerLength-1) {
+                    result[biggerLength-i] = (byte)(sum-10);
+                    result[0] = '1';
+                    continue;
+                }
+                result[biggerLength-i] = (byte)(sum-10);
                 biggerNum[biggerLength-2-i] +=1;
             } else {
-                result[biggerLength-1-i] = sum;
+                result[biggerLength-i] = sum;
             }
         }
 
@@ -96,7 +100,7 @@ public class BigInteger
     @Override
     public String toString()
     {
-        return value;
+        return value.trim();
     }
   
     static BigInteger evaluate(String input) throws IllegalArgumentException
@@ -124,7 +128,7 @@ public class BigInteger
         BigInteger num1 = new BigInteger(nums[0].trim());
         BigInteger num2 = new BigInteger(nums[1].trim());
 
-        BigInteger result = new BigInteger();
+        BigInteger result;
         switch (operator) {
             case "\\+":
                 result = num1.add(num2);
