@@ -8,25 +8,14 @@ public class BigInteger
 {
     public static final String QUIT_COMMAND = "quit";
     public static final String MSG_INVALID_INPUT = "입력이 잘못되었습니다.";
-  
-    // implement this
-    public static final Pattern EXPRESSION_PATTERN = Pattern.compile("");
+
     public String value;
     public char sign='+';
 
     public BigInteger() {
         value = "not working";
     }
-  
-  
-    public BigInteger(int i)
-    {
-        value = "Done!"+i;
-    }
-  
-    public BigInteger(int[] num1)
-    {
-    }
+
   
     public BigInteger(String s)
     {
@@ -116,8 +105,6 @@ public class BigInteger
         byte[] smallerNum = nums[1].value.getBytes();
         int smallerLength = nums[1].value.getBytes().length; // 둘 중에 더 작은 길
         int biggerLength = nums[0].value.getBytes().length;
-        char biggerNumSign =  nums[0].sign;
-        char smallerNumSign = nums[1].sign;
 
         byte[] result = new byte[biggerLength+1];
 
