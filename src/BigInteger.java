@@ -95,9 +95,9 @@ public class BigInteger
             }
         }
 
-        if(biggerNumSign=='-' && smallerNumSign=='-') return new BigInteger("-"+new String(result));
+        if(biggerNumSign=='-' && smallerNumSign=='-') return new BigInteger("-"+(new String(result)).trim());
 
-        return new BigInteger(new String(result));
+        return new BigInteger((new String(result)).trim());
     }
   
     public BigInteger subtract(BigInteger big)
@@ -143,25 +143,65 @@ public class BigInteger
         }
 
         if(this.value.equals(nums[0].value)) {
-            if(this.sign=='+') return new BigInteger(new String(result));
-            else return new BigInteger("-"+new String(result));
+            if(this.sign=='+') return new BigInteger((new String(result)).trim());
+            else return new BigInteger(("-"+new String(result)).trim());
         } else {
-            if(this.sign=='+') return new BigInteger("-"+new String(result));
-            else return new BigInteger(new String(result));
+            if(this.sign=='+') return new BigInteger(("-"+new String(result)).trim());
+            else return new BigInteger((new String(result)).trim());
         }
     }
   
     public BigInteger multiply(BigInteger big)
     {
-        return new BigInteger(3);
+        // 처음에 '0'에 해당하는 값들을 빼준 후의 값들로 연산 -> 마지막에 다시 '0'을 더함.
+        // add와 subtract도 수정 요망함.
+
+        byte[] num1 = value.getBytes();
+        byte[] num2 = big.value.getBytes();
+        byte zero = '0';
+        byte[] result = new byte[num1.length+num2.length];
+
+        for(int i=0; i<num1.length; i++) {
+            num1[i] = (byte)(num1[i]-zero);
+        }
+
+        for(int j=0; j<num2.length; j++) {
+            num2[j] = (byte)(num2[j]-zero);
+        }
+
+        for(int i=(num1.length-1); i>=0; i--) {
+            for(int j=(num2.length-1); j>=0; j--) {
+                int multy = num1[i]*num2[j];
+                result[i+j+1] += multy;
+                if(result[i+j+1] >=10) {
+                    result[i+j] += result[i+j+1]/10;
+                    result[i+j+1] %= 10;
+                }
+            }
+        }
+
+        for(int i=0; i<result.length; i++) {
+            result[i] += zero;
+        }
+
+
+        if(sign =='-') {
+            if(big.sign=='+') return new BigInteger("-"+new String(result));
+        } else {
+            if(big.sign=='-') return new BigInteger("-"+new String(result));
+        }
+        return new BigInteger(new String(result));
     }
   
     @Override
     public String toString()
     {
         for(int i=0;i<value.length();i++) {
-            if(value.charAt(i)!='0') value = value.substring(i);
-            break;
+            if(value.charAt(i)!='0') {
+                value = value.substring(i);
+                break;
+            }
+            if(value.charAt(i)=='0' && i==value.length()-1) value="0";
         }
         if(sign=='-') return "-"+value.trim();
         return value.trim();
@@ -196,7 +236,7 @@ public class BigInteger
 
         }
 
-        System.out.println(nums[0]+", "+nums[1]);
+        System.out.println(nums[0].trim()+", "+nums[1].trim());
         BigInteger num1 = new BigInteger(nums[0].trim());
         BigInteger num2 = new BigInteger(nums[1].trim());
 
