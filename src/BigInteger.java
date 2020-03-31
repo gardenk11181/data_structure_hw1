@@ -67,6 +67,10 @@ public class BigInteger
 
         for(int i=0 ; i<biggerLength; i++) {
             if(i>=smallerLength) {
+                if(biggerNum[biggerLength-1-i]>'9') {
+                    result[0] =1;
+                    result[biggerLength-i] = (byte)(biggerNum[biggerLength-1-i]-10);
+                }
                 result[biggerLength-i] = biggerNum[biggerLength-1-i];
                 continue;
             }
@@ -190,7 +194,10 @@ public class BigInteger
             }
             if(value.charAt(i)=='0' && i==value.length()-1) value="0";
         }
-        if(sign=='-') return "-"+value.trim();
+        if(sign=='-') {
+            if(value=="0") return value.trim();
+            return "-"+value.trim();
+        }
         return value.trim();
     }
   
@@ -223,7 +230,7 @@ public class BigInteger
 
         }
 
-        System.out.println(nums[0].trim()+", "+nums[1].trim());
+//        System.out.println(nums[0].trim()+", "+nums[1].trim());
         BigInteger num1 = new BigInteger(nums[0].trim());
         BigInteger num2 = new BigInteger(nums[1].trim());
 
