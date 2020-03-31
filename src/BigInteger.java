@@ -68,8 +68,9 @@ public class BigInteger
         for(int i=0 ; i<biggerLength; i++) {
             if(i>=smallerLength) {
                 if(biggerNum[biggerLength-1-i]>'9') {
-                    result[0] =1;
+                    result[0] ='1';
                     result[biggerLength-i] = (byte)(biggerNum[biggerLength-1-i]-10);
+                    continue;
                 }
                 result[biggerLength-i] = biggerNum[biggerLength-1-i];
                 continue;
